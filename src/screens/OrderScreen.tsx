@@ -10,6 +10,7 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TabStackParamList } from "../navigator/TabNavigator";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigator/RootNavigator";
+import DeliveryCard from "./DeliveryCard";
 
 type OrderScreenRouteProp = RouteProp<RootStackParamList, "Order">;
 
@@ -24,10 +25,17 @@ const OrderScreen = () => {
     params: { order },
   } = useRoute<OrderScreenRouteProp>();
 
-  useLayoutEffect(() => {}, [order]);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: order.trackingItems.customer.name,
+      headerTintColor: "#EB6A7C",
+      headerBackTitle: "Deliveries",
+      headerTitleStyle: { color: "black" },
+    });
+  }, [order]);
   return (
     <View style={styles.container}>
-      <Text>Orders Screen</Text>
+      <DeliveryCard order={order} fullWidth />
     </View>
   );
 };

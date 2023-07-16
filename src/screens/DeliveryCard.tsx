@@ -5,6 +5,7 @@ import MapView, { Marker } from "react-native-maps";
 
 type Props = {
   order: Order;
+  fullWidth?: boolean;
 };
 
 const DeliveryCard = ({ order }: Props) => {
@@ -30,37 +31,38 @@ const DeliveryCard = ({ order }: Props) => {
             Shipping Cost: ${order.shippingCost}
           </Text>
         </View>
+
+        <Divider color="white" />
+        <View style={{ padding: 20 }}>
+          {order.trackingItems.items.map(item => (
+            <View style={styles.quantity} key={item.item_id}>
+              <Text style={[styles.text5, styles.text4]}>{item.name}</Text>
+              <Text style={styles.text4}>{item.quantity}</Text>
+            </View>
+          ))}
+        </View>
+        <MapView
+          initialRegion={{
+            latitude: order.Lat,
+            longitude: order.Lng,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          }}
+          style={styles.map}
+        >
+          {order.Lat && order.Lng && (
+            <Marker
+              coordinate={{
+                latitude: order.Lat,
+                longitude: order.Lng,
+              }}
+              title="Delivery Location"
+              description={order.Address}
+              identifier="destination"
+            />
+          )}
+        </MapView>
       </View>
-      <Divider color="white" />
-      <View style={{ padding: 20 }}>
-        {order.trackingItems.items.map(item => (
-          <View style={styles.quantity} key={item.item_id}>
-            <Text style={[styles.text5, styles.text4]}>{item.name}</Text>
-            <Text style={styles.text4}>{item.quantity}</Text>
-          </View>
-        ))}
-      </View>
-      <MapView
-        initialRegion={{
-          latitude: order.Lat,
-          longitude: order.Lng,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
-        }}
-        style={styles.map}
-      >
-        {order.Lat && order.Lng && (
-          <Marker
-            coordinate={{
-              latitude: order.Lat,
-              longitude: order.Lng,
-            }}
-            title="Delivery Location"
-            description={order.Address}
-            identifier="destination"
-          />
-        )}
-      </MapView>
     </Card>
   );
 };
